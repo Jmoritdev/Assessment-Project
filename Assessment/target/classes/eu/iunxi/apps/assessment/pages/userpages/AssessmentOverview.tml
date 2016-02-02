@@ -1,0 +1,88 @@
+<html t:type="layout" title="Overzicht van Assessments"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>  
+    
+    <t:if test="user.hasPermissionTo(assessmentEditPermission)">
+        <div id="newAssessment" style="float:right">
+            <t:form t:id="newAssessmentForm">            
+                <t:submit value="Nieuw Assessment" class="btn btn-primary"/>
+            </t:form>
+        </div>
+    </t:if>
+    
+    <t:if test="totalAmountOfAssessments">
+        <t:form t:id="searchForm" class="form-inline">
+            <div class="input-group">
+                <t:textfield value="searchString" t:id="searchField" placeholder="Zoek op persoon"/>
+                <span class="input-group-btn">
+                    <t:submit class="btn btn-success" value="Zoek"/>
+                </span>
+            </div>
+        </t:form>
+    </t:if>
+    
+    <t:unless test="resultSet.isEmpty()">
+        <table id="assessmentTable" class="table table-condensed table-hover">
+            <thead>
+                <tr class="info">
+                    <th>Aanmaakdatum:</th>
+                    <th>Unique ID:</th>
+                    <th>Naam persoon:</th>
+                    <th>Email persoon:</th>
+                    <th>Status:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <t:loop source="resultSet" value="loopedAssessment">
+                    <tr class="parent">
+                        <td>${loopedAssessment.getTimeStamp()}</td>
+                        <td>
+                            <t:pagelink page="userpages/assessmentDetails" context="loopedAssessment">${loopedAssessment.uid}</t:pagelink>
+                        </td>
+                        <td>${loopedAssessment.personName}</td>
+                        <td>${loopedAssessment.personEmail}</td>
+                        <td>${status}</td>
+                    </tr>
+                </t:loop>  
+            </tbody> 
+        </table> 
+        <ul class="pager">
+            <t:if test="allowedPrevious">
+                <li>
+                    <t:pagelink page="userpages/assessmentOverview" context="previousPage">
+                        Vorige
+                    </t:pagelink>
+                </li>
+            </t:if>
+            <t:if test="allowedNext">
+                <li>
+                    <t:pagelink page="userpages/assessmentOverview" context="nextPage">
+                        Volgende
+                    </t:pagelink>
+                </li>
+            </t:if>
+            <li>
+                pagina ${page} van de ${amountOfPages}
+            </li>
+        </ul>
+    </t:unless>
+    
+    <t:if test="resultSet.isEmpty()">
+        <t:if test="totalAmountOfAssessments">
+            <br/>
+            <br/>
+            <div class="alert alert-info" role="alert">Geen resultaten om te tonen.</div>
+        </t:if>
+    </t:if>
+    
+    <t:unless test="totalAmountOfAssessments">
+        <br/>
+        <br/>
+        <div class="alert alert-info" role="alert">
+            <i class="fa fa-info-circle fa-lg"/> Er zijn nog geen assessments aangemaakt. Druk op de "Nieuw Assessment" knop om er eentje aan te maken.
+        </div>
+    </t:unless>
+
+    
+</html>

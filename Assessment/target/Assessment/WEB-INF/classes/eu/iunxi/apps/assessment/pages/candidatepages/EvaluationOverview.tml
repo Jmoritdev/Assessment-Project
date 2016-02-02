@@ -1,0 +1,112 @@
+<html t:type="layout" title="" isPublic="true"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" id="confirmationModal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Bevestig inleveren</h4>
+                </div>
+                <div class="modal-body">
+                    <t:if test="allQuestionsAnswered">
+                        <strong>Weet je zeker dat je je assessment in wilt leveren? Je kan hierna niet meer je vragen inzien of wijzigen!</strong>
+                    </t:if>
+                    <t:unless test="allQuestionsAnswered">
+                        <strong>Weet je zeker dat je je assessment in wilt leveren? Je hebt nog niet alle vragen beantwoord!</strong>
+                    </t:unless>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Sluiten</button>
+                    <t:eventlink event="closeAssessment" class="btn btn-warning">Inleveren</t:eventlink>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+    
+    
+    <t:if test="assessment.closed">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Gesloten Assessment</h3>
+            </div>
+            <div class="panel-body">
+                <div style="text-align: center">
+                    <b>Voortgang</b>
+                </div>
+                <!--Progress bar-->
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" role="progressbar" style="width: ${percentageDone}%; min-width: 3em">
+                        ${PercentageDone}%
+                    </div>
+                </div>
+                Dit assessment is gesloten.
+            </div>
+        </div>
+    </t:if>
+    
+    <t:unless test="assessment.closed">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Overzicht
+                    <div style="float:right">
+                        <div t:type="zone" id="timeZone" t:mixins="zonerefresh" t:zonerefresh.period="1">${duration}</div>
+                    </div>
+                </h3>
+            </div>
+
+            <div class="panel-body">
+                <div style="text-align: center">
+                    <b>Voortgang</b>
+                </div>
+                <!--Progress bar-->
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" role="progressbar" style="width: ${percentageDone}%; min-width: 3em">
+                        ${PercentageDone}%
+                    </div>
+                </div>
+                <t:pagelink page="candidatepages/evaluation" class="btn btn-primary"
+                            t:context="[assessment.uid, previousQuestion]">Terug</t:pagelink>
+            </div>
+        </div>
+        
+        <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#confirmationModal">Inleveren</button>
+        
+        <div class="confirmation" style="display:none">
+            <strong>Weet je zeker dat je je assessment in wilt leveren? Je kan hierna je vragen niet meer aanpassen!</strong>
+            <br/>
+            
+            <button class="btn btn-info confirmation-no hand-in">Nee</button>
+        </div>
+        
+        <t:loop source="categoriesFromAssessment" value="loopedCategory">
+            <h3>${loopedCategory.title} vragen</h3>
+            <table class="table table-condensed" style="width:60%">
+                <tr>
+                    <th style="width:33%">Vraagnummer:</th>
+                    <th style="width:33%">Titel:</th>
+                    <th style="width:33%">Beantwoord?</th>
+                </tr>
+                <t:loop source="questionsFromCategory" value="loopedQuestion">
+                    <tr>
+                        <td>${numberWithQuestion}</td>
+                        <td>
+                            <t:pagelink page="candidatepages/evaluation"
+                                        t:context="[assessment.uid, loopedQuestion]">${loopedQuestion.title}</t:pagelink>
+                        </td>
+                        <td t:type="if" test="answered">
+                            <span style="color:green">ja</span>
+                        </td>
+                        <td t:type="unless" test="answered">
+                            <span style="color:red">nee</span>
+                        </td>
+                    </tr>
+                </t:loop>
+            </table>
+        </t:loop>
+    </t:unless>
+</html>

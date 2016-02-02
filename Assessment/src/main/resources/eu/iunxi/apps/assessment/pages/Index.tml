@@ -1,0 +1,43 @@
+<html t:type="layout" title="prop:title" isPublic="true"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter"
+      xmlns:j="tapestry-library:jquery">
+    
+    <t:unless test="noUsers()">      
+        <t:form class="form-signin" t:id="loginForm" style="width:350px">
+            <t:textfield class="form-control" type="email" placeholder="Emailadres" value="loginEmail" />
+            <t:textfield class="form-control" type="password" placeholder="Wachtwoord" value="loginPword" />
+            <t:submit class="btn btn-lg btn-primary btn-block" value="Log in"/> 
+        </t:form>
+    </t:unless>
+    
+    <t:if test="noUsers()">
+        <t:form t:id="firstUserForm">
+            
+            <div class="form-group">
+                <t:label for="userNameField"/>
+                <t:textfield t:id="userNameField" value="name" t:label="Naam" class="form-control" t:validate="required"/>
+            </div>
+            
+            <div class="form-group">
+                <t:label for="userEmailField"/>
+                <t:textfield t:id="userEmailField" type="email" value="email" t:label="Emailadres" class="form-control" t:validate="required"/> 
+            </div>
+            
+            <div class="form-group">
+                <t:label for="passwordField"/>
+                <t:textfield t:id="passwordField" type="password" value="password" 
+                             t:label="Wachtwoord" class="form-control" t:validate="required, minlength=6"/>
+            </div>
+            
+            <div class="form-group">
+                <t:label for="confirmPasswordField"/>
+                <t:textfield t:id="confirmPasswordField" type="password" value="confirmPassword" 
+                             t:label="Bevestig wachtwoord" class="form-control" t:validate="required, minlength=6"/>
+            </div>
+            
+            <t:submit class="btn btn-warning" value="Opslaan"/>
+        </t:form>
+    </t:if>
+    
+</html>

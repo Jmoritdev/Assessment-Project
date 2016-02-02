@@ -1,0 +1,116 @@
+<html t:type="layout" title="prop:title"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+    
+
+    <t:form t:id="newQuestionForm">
+        
+        <div class="form-group">
+            <t:label for="titleField"/>
+            <t:textfield t:id="titleField" value="question.title" t:validate="required" t:label="Titel"/>
+        </div>
+        
+        <div class="form-group">    
+            <t:label for="descriptionField"/>
+            <t:textarea rows="6" cols="50" t:id="descriptionField" id="descriptionField" 
+                        value="question.description" t:validate="required" t:label="Beschrijving"/>
+            Je kan pas afbeeldingen toevoegen nadat de vraag is opgeslagen.
+        </div>  
+                      
+        <div class="form-group">
+            <t:label for="categorySelect"/>
+            <t:select t:id="categorySelect" t:type="select" t:model="categoryModel" value="category"
+                      t:validate="required" t:blankOption="ALWAYS" t:blankLabel="" t:label="Categorie"/>         
+        </div>
+        
+        <div class="form-group">
+            <label>Moeilijkheidsgraad</label>
+            <t:RadioGroup t:id="difficultyRadioGroup" value="question.Difficulty" t:validate="required" t:label="Moeilijkheidsgraad">
+                <div class="checkbox">    
+                    <t:Radio t:id="difficultyJunior" t:value="Question.Difficulty.JUNIOR" label="Junior"/>
+                    <t:label for="difficultyJunior"/>
+                </div>
+                <div class="checkbox"> 
+                    <t:Radio t:id="difficultyMedior" t:value="Question.Difficulty.MEDIOR" label="Medior"/>
+                    <t:label for="difficultyMedior"/>
+                </div>
+                <div class="checkbox"> 
+                    <t:Radio t:id="difficultySenior" t:value="Question.Difficulty.SENIOR" label="Senior"/>
+                    <t:label for="difficultySenior"/>
+                </div>
+            </t:RadioGroup>    
+        </div>
+            
+        <div t:type="unless" test="closed">
+            <div class="form-group">
+                <t:label for="pointsWorthField1"/>
+                <t:textfield t:id="pointsWorthField1" value="pointsWorth" t:validate="required" t:label="Puntenwaarde"/>
+            </div>
+            <div class="form-group">
+                <t:label for="cheatSheetField"/>
+                <t:textarea rows="3" t:id="cheatSheetField" value="cheatSheet" t:label="Voorbeeld antwoord (onzichtbaar voor sollicitant)" />
+            </div>
+        </div>
+            
+        <div t:type="if" test="closed">
+
+            <table class="table table-condensed">
+                
+                <b>Opties:</b>
+
+                <thead>
+                    <tr colspan="4">
+                        <td>Beschrijving</td>
+                        <td>Punten</td>
+                        <td>Antwoord is juist</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t:type="AjaxFormLoop" source="options" t:value="option" encoder="optionEncoder">
+                        
+                            <td>
+                                <t:textfield t:id="optionDescField" value="option.description" t:validate="required"/>
+                            </td>
+                            <td>
+                                <t:textfield style="width:50px;" t:id="pointsWorthField" value="option.pointsWorth" t:validate="required"/>
+                            </td>
+                            <td>
+                                <t:checkbox t:id="correctField" value="option.correct"/>
+                            </td>
+                            <td>
+                                <t:removerowlink>
+                                    <i class="fa fa-trash fa-2x"/>
+                                </t:removerowlink>
+                            </td>
+
+                        <p:addRow>
+                            <td colspan="4">
+                                <t:addrowlink class="btn btn-default btn-sm">+1 optie</t:addrowlink>
+                            </td>
+                        </p:addRow>   
+                    </tr>
+                </tbody>
+            </table>
+        </div>   
+        <t:submit value="Opslaan" class="btn btn-warning"/>&nbsp;
+        <t:submit t:id="staySubmit" value="Opslaan en blijven" class="btn btn-warning"/>&nbsp;
+        <t:pagelink page="userpages/categoryDetails" t:context="category" class="btn btn-primary">Annuleren</t:pagelink>
+    </t:form>
+    <script src="${asset:context:ckeditor/ckeditor.js}"></script>
+    <script>
+        CKEDITOR.replace( 'descriptionField', {
+            toolbar: [
+            { name: 'document', items: [ 'Templates' ] },
+            { name: 'styles', items: [ 'Format', 'Styles' ] },
+            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Strike', '-', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+            { name: 'paragraph', groups: [ 'list', 'indent', 'blocks' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote'] },      
+            { name: 'insert', items: [ <t:if test="question.id"> 'Image',</t:if> 'Table', 'HorizontalRule' ] },
+            { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+            { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+            { name: 'editing', groups: [ 'find', 'selection' ], items: [ 'Find', 'Replace', '-', 'SelectAll' ] },
+            { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] }
+            ],
+            filebrowserBrowseUrl: '/Assessment/userpages/QuestionUploadImage/${question.id}',
+        });
+    </script>
+</html>

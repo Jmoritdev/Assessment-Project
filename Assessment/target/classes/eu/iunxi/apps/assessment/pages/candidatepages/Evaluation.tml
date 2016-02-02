@@ -1,0 +1,129 @@
+<html t:type="layout" title="prop:title" isPublic="true"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+    
+
+    <t:if test="assessment.closed">
+        <!--if the assessment is closed-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Gesloten Assessment</h3>
+            </div>
+            <div class="panel-body">
+                <div style="text-align: center">
+                    <b>Voortgang</b>
+                </div>
+                <!--Progress bar-->
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" role="progressbar" style="width: ${percentageDone}%; min-width: 3em">
+                        ${PercentageDone}%
+                    </div>
+                </div>
+                Dit assessment is gesloten.
+            </div>
+        </div>
+    </t:if>
+    
+    <t:unless test="assessment.closed">
+        <t:if test="newPerson">
+            Welkom bij je assessment. Voer hier je naam en email-adres in aub. Hierna zal de assessment beginnen.<br/>
+            <t:form t:id="personForm">
+                <div class="form-group">
+                    <t:label for="personNameField"/>
+                    <t:textfield class="form-control" t:id="personNameField" value="assessment.personName" t:validate="required" label="Naam"/>
+                </div>
+                <div class="form-group">
+                    <t:label for="personEmailField"/>
+                    <t:textfield class="form-control" t:id="personEmailField" value="assessment.personEmail" t:validate="required" label="Email" type="email"/>
+                </div>
+                <t:submit value="Start" class="btn btn-success"/>
+            </t:form>    
+        </t:if>
+        
+            <t:unless test="newPerson">
+                <!--Overview panel-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Vraag ${questionProgress} / ${assessment.assessmentanswers.size()}
+                            <div style="float:right">
+                                <div t:type="zone" id="timeZone" t:mixins="zonerefresh" t:zonerefresh.period="1">${duration}</div>
+                            </div>
+                        </h3>
+                    </div>
+                    
+                    <div class="panel-body">
+                        <div style="text-align: center">
+                            <b>Voortgang</b>
+                        </div>
+                        <!--Progress bar-->
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" style="width: ${percentageDone}%; min-width: 3em">
+                                ${PercentageDone}%
+                            </div>
+                        </div>
+                    <t:eventlink event="navigateToOverview" t:context="assessment.uid" class="btn btn-primary">Overzicht</t:eventlink>
+                </div>
+            </div> 
+                
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Categorie: ${question.category.title}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <t:outputraw value="question.description"/>
+                    
+                    <hr/>
+                    <t:form t:id="answerForm">
+                        <t:if test="open">
+                            <t:label for="answerField"/>
+                            <t:textarea t:id="answerField" value="userAnswer" label="Jouw antwoord" rows="3" style="width:50%"/>
+                        </t:if>
+                        <t:unless test="open">
+                            <t:if test="closedSingle">
+                                    
+                                <t:RadioGroup t:id="optionRadioGroup" value="selectedOption">
+                                    <t:loop source="options" value="loopedOption">
+                                               
+                                        <t:if test="selected">
+                                            <t:radio t:value="loopedOption" checked="checked"/>
+                                            ${loopedOption.description}
+                                        </t:if>
+                                        <t:unless test="selected">
+                                            <t:radio t:value="loopedOption"/>
+                                            ${loopedOption.description}
+                                        </t:unless>    
+                                        <br/>
+                                    </t:loop>
+                                    <br/>
+                                </t:RadioGroup>
+                                   
+                            </t:if>
+                            <t:if test="closedMultiple">
+                                <t:checklist t:id="optionsChecklist" t:model="optionModel" t:selected="selectedOptions" 
+                                             t:value="selectedOptions" t:encoder="optionEncoder"/> 
+                            </t:if>
+                        </t:unless> 
+                        <t:submit value="Opslaan en volgende"/>   
+                    </t:form>
+                </div>
+            </div>
+        </t:unless>
+    </t:unless>
+    
+    
+    
+    
+    <!--this input plus script will refresh the page if the back button is used-->
+    <input type="hidden" id="refreshed" value="no"/>
+    <script type="text/javascript">
+        onload=function(){
+        var e=document.getElementById("refreshed");
+        if(e.value=="no")e.value="yes";
+        else{e.value="no";location.reload();}
+        }
+    </script>
+    
+</html>

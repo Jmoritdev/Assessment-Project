@@ -1,0 +1,33 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/assessment</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password"></property>
+        <property name="hbm2ddl.auto">update</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        
+        <mapping class="eu.iunxi.apps.assessment.model.User" />
+        <mapping class="eu.iunxi.apps.assessment.model.AssessmentAnswer" />
+        <mapping class="eu.iunxi.apps.assessment.model.AssessmentAnswerClosed" />
+        <mapping class="eu.iunxi.apps.assessment.model.AssessmentAnswerClosedMultiple" />
+        <mapping class="eu.iunxi.apps.assessment.model.AssessmentAnswerClosedSingle" />
+        <mapping class="eu.iunxi.apps.assessment.model.AssessmentAnswerOpen" />
+        <mapping class="eu.iunxi.apps.assessment.model.Assessment" />
+        <mapping class="eu.iunxi.apps.assessment.model.Category" />
+        <mapping class="eu.iunxi.apps.assessment.model.QuestionClosedOption" />
+        <mapping class="eu.iunxi.apps.assessment.model.Question" />
+        <mapping class="eu.iunxi.apps.assessment.model.QuestionClosed" />
+        <mapping class="eu.iunxi.apps.assessment.model.QuestionClosedMultiple" />
+        <mapping class="eu.iunxi.apps.assessment.model.QuestionClosedSingle" />
+        <mapping class="eu.iunxi.apps.assessment.model.QuestionImage" />
+        <mapping class="eu.iunxi.apps.assessment.model.QuestionOpen" />
+        
+    </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,117 @@
+<html t:type="layout" title="prop:title"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <t:if test="category.questions">
+        <dl>
+            <dt>Totaal aantal vragen in deze categorie:</dt>
+            <dd>${amountofquestions}</dd>
+        </dl>
+    </t:if>
+    
+    
+    <div class="dropdown" t:type="if" test="user.hasPermissionTo(questionEditPermission)">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            Nieuwe Vraag <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <t:pageLink page="userpages/QuestionNew" t:context="['OPEN', null, category]">Open Vraag</t:pageLink>
+            </li>
+            <li>
+                <t:pageLink page="userpages/QuestionNew" t:context="['CLOSEDSINGLE', null, category]">Gesloten vraag met 1 aankiesbaar antwoord</t:pageLink>
+            </li>
+            <li>
+                <t:pageLink page="userpages/QuestionNew" t:context="['CLOSEDMULTIPLE', null, category]">Gesloten vraag met meerdere aankiesbare antwoorden</t:pageLink>
+            </li>
+        </ul>
+    </div>
+    
+    <t:if test="category.questions">
+        <h3 style="margin-bottom: 0px;">
+            Vragen in deze categorie:
+        
+            <t:form t:id="searchForm" class="form-inline" style="float:right">
+                <div class="input-group">
+                    <t:textfield class="form-control" value="searchString" t:id="searchField" label="Zoeken" placeholder="Zoeken"/>
+                    <span class="input-group-btn">
+                        <t:submit class="btn btn-success" value="Zoek"/>
+                    </span>
+                </div>
+            </t:form>
+        </h3>
+    </t:if>
+            
+    
+        
+    <t:if test="category.questions">
+        <t:unless test="query.list().isEmpty()">
+            <table class="table table-condensed table-hover">
+                <thead>
+                    <tr class="info">
+                        <th>Titel:</th>
+                        <th>Niveau:</th>
+                        <th>Type:</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t:loop source="questions" value="loopedQuestion">
+                        <tr class="parent">
+                            <td>
+                                <a class="descriptionButton">${loopedQuestion.title}</a>
+                            </td>
+                            <td>${loopedQuestion.difficulty}</td>
+                            <td>${typeOfQuestion}</td>
+                            <td>
+                                <t:if test="user.hasPermissionTo(questionEditPermission)">
+                                    <t:unless test="closed">
+                                        <t:pagelink page="userpages/QuestionNew" t:context="['OPEN', loopedQuestion, category]">
+                                            <i class="fa fa-edit fa-lg"/>
+                                        </t:pagelink>
+                                    </t:unless>
+                                    <t:if test="closedMultiple">
+                                        <t:pagelink page="userpages/QuestionNew" t:context="['CLOSEDMULTIPLE', loopedQuestion, category]">
+                                            <i class="fa fa-edit fa-lg"/>
+                                        </t:pagelink>
+                                    </t:if>
+                                    <t:if test="closedSingle">
+                                        <t:pagelink page="userpages/QuestionNew" t:context="['CLOSEDSINGLE', loopedQuestion, category]">
+                                            <i class="fa fa-edit fa-lg"/>
+                                        </t:pagelink>
+                                    </t:if>
+                                &nbsp;
+                                </t:if>
+                                
+                                <t:if test="user.hasPermissionTo(questionRemovePermission)">
+                                    <t:pagelink page="userpages/QuestionDelete" t:context="loopedQuestion">
+                                        <i class="fa fa-trash fa-lg"/>
+                                    </t:pagelink>
+                                </t:if>
+                            </td>
+                        </tr>
+                        <tr class="child" style="display:none; background-color:#F9F9F9" >
+                            <td colspan="4">
+                                <t:outputraw value="loopedQuestion.description"/>
+                            </td>
+                        </tr>
+                    </t:loop>
+                </tbody>
+            </table>
+        </t:unless>
+        <t:if test="query.list().isEmpty()">
+            <t:if test="category.questions">
+                &nbsp;
+                <div class="alert alert-info">Geen resultaten om te tonen.</div>
+            </t:if>
+        </t:if>
+    </t:if>
+    
+    <t:unless test="category.questions">
+            &nbsp;
+        <p class="alert alert-info">
+            <i class="fa fa-info-circle fa-lg"/> Er zijn nog geen vragen toegevoegd aan deze categorie.
+            Druk op de "Nieuwe Vraag" knop om een vraag aan te maken.</p>
+    </t:unless>
+    
+</html>    

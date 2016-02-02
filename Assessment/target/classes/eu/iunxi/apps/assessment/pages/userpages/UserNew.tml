@@ -1,0 +1,35 @@
+<html t:type="layout" title="prop:title"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+      
+    <t:form t:id="userForm">
+        
+        <div class="form-group">
+            <t:label for="userNameField"/>
+            <t:textfield t:id="userNameField" value="user.name" class="form-control" label="Naam" t:validate="required"/>
+        </div>
+        
+        <div class="form-group">
+            <t:label for="userEmailField"/>
+            <t:textfield t:id="userEmailField" value="user.email" class="form-control" label="Email" t:validate="required" type="email"/>
+        </div>
+        
+        <t:unless test="user.password">
+            <div class="form-group">
+                <t:label for="userTempPassField"/>
+                <t:textfield t:id="userTempPassField" value="user.password" class="form-control" label="Tijdelijk wachtwoord" t:validate="required" type="password"/>
+            </div>
+        </t:unless>
+        
+        <div class="form-group">
+            <t:label for="permissionsCheckList"/>
+            <t:checklist t:id="permissionsCheckList" t:model="permissionModel" t:selected="selectedPermissions"
+                         t:value="selectedPermissions" t:encoder="permissionEncoder" label="Permissies"/>   
+        </div>
+        
+        <t:submit class="btn btn-warning" value="Opslaan"/> &nbsp;
+        <t:pagelink page="userpages/userOverview" class="btn btn-primary" value="Opslaan">Annuleren</t:pagelink>
+        
+    </t:form>
+    
+</html>    

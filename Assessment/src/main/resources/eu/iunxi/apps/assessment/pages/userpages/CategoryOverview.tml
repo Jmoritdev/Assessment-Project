@@ -1,0 +1,62 @@
+<html t:type="layout" title="Overzicht van categorieën"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <t:if test="user.hasPermissionTo(categoryEditPermission)">
+        <t:form t:id="newCategoryForm" class="form-inline">
+            <div class="input-group">
+                <t:textfield id="categoryTitle" value="newCategoryTitle" t:validate="required" placeholder="Nieuwe categorie..."/>
+                <span class="input-group-btn">
+                    <t:submit value="Opslaan" class="btn btn-primary"/>
+                </span>
+            </div> 
+        </t:form>
+    </t:if>
+
+    
+    <t:unless test="categoryList">
+        &nbsp;
+        <div class="alert alert-info">
+            <i class="fa fa-info-circle fa-lg"/> Er zijn nog geen categorieën aangemaakt. 
+            Vul het formulier hierboven in om een nieuwe categorie aan te maken.
+        </div>
+    </t:unless>
+    
+    <t:if test="categoryList">
+        <table id="categoryTable" class="table table-condensed table-hover">
+            <thead>
+                <tr class="info">
+                    <th>Titel</th>
+                    <th>Aantal vragen:</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <t:loop source="categoryList" value="loopedCategory">
+                    <tr>
+                        <td>
+                            <t:pagelink page="userpages/categoryDetails" context="loopedCategory">${loopedCategory.title}</t:pagelink>
+                        </td>
+                        <td>
+                            ${loopedCategory.questions.size()}
+                        </td>
+                        <td>
+                            <t:if test="user.hasPermissionTo(categoryEditPermission)">
+                                <t:pagelink page="userpages/CategoryEdit" t:context="loopedCategory">
+                                    <i data-toggle="modal" class="fa fa-edit fa-lg"></i>
+                                </t:pagelink>
+                                &nbsp;
+                            </t:if>
+                            <t:if test="user.hasPermissionTo(categoryRemovePermission)">
+                                <t:pagelink page="userpages/CategoryDelete" t:context="loopedCategory">
+                                    <i class="fa fa-trash fa-lg" ></i>
+                                </t:pagelink>
+                            </t:if>
+                        </td>
+                    </tr> 
+                </t:loop>
+            </tbody>  
+        </table>
+    </t:if>
+    
+</html>

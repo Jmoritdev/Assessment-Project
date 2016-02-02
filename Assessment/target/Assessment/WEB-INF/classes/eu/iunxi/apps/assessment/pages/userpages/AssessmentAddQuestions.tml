@@ -1,0 +1,28 @@
+<html t:type="layout" title="Voeg vragen toe aan het assessment"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+    
+    <t:form t:id="addQuestionsForm" style="width:50%">
+        <div class="form-group">
+            <t:label for="amountOfOpenQuestionsField"/>
+            <t:textfield t:validate="required" value="openQuestionsPerCategory" t:id="amountOfOpenQuestionsField" label="Aantal open vragen"/>
+        </div>
+        <div class="form-group">
+            <t:label for="amountOfClosedQuestionsField"/>
+            <t:textfield t:validate="required" value="closedQuestionsPerCategory" t:id="amountOfClosedQuestionsField" label="Aantal gesloten vragen"/>
+        </div>
+        <div class="form-group">
+            <t:label for="categorySelect"/>
+            <t:select t:id="categorySelect" t:type="select" t:model="categoryModel" value="category"
+                      t:validate="required" t:blankOption="ALWAYS" t:blankLabel="" t:label="Categorie"/>
+        </div>
+        <div class="form-group">
+            <t:label for="difficultySelect"></t:label>
+            <t:select t:id="difficultySelect" t:type="select" t:model="difficultyModel" value="difficulty" 
+                      t:validate="required" t:blankOption="ALWAYS" t:blankLabel="" label="Moeilijkheidsgraad"/>
+        </div>
+        <t:submit class="btn btn-warning" value="Opslaan"/>&nbsp;
+        <t:pagelink page="userpages/assessmentDetails" t:context="assessment" class="btn btn-primary">Annuleren</t:pagelink>
+    </t:form>
+    
+</html>    

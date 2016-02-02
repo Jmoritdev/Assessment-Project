@@ -1,0 +1,19 @@
+<html t:type="layout" title=""
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <h3 class="panel-title">Categorie verwijderen</h3>
+        </div>
+        <div class="panel-body">
+            <strong>Weet je zeker dat je de ${category.title} categorie wilt verwijderen? 
+                    Dit zal ook alle vragen in de categorie ontoegankelijk maken!</strong>
+        </div>
+        <div class="panel-footer">
+            <t:eventlink t:event="delete" class="btn btn-danger">Verwijderen</t:eventlink>&nbsp;
+            <t:pagelink page="userpages/categoryOverview" class="btn btn-primary">Annuleren</t:pagelink>
+        </div>
+    </div>
+
+</html>

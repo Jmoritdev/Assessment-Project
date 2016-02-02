@@ -1,0 +1,252 @@
+<html t:type="layout" title=""
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+    
+    <div class="modal fade" id="newSubjectModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <t:form t:id="newSubjectForm">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        Voer hier alvast de naam of email in van de sollicitant (optioneel)
+                        <div class="form-group">
+                            <t:label for="subjectNameField"/>
+                            <t:textfield t:id="subjectNameField" value="assessment.personName" class="form-control" label="Naam"/>
+                        </div>
+                        <div class="form-group">
+                            <t:label for="subjectEmailField"/>
+                            <t:textfield type="email" t:id="subjectEmailField" value="assessment.personEmail" class="form-control" label="Email"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <t:submit style="float:left" class="btn btn-warning" value="Opslaan"/>
+                        <button style="float:left" type="button" class="btn btn-primary" data-dismiss="modal">Sluiten</button>
+                    </div>
+                </div>
+            </t:form>
+        </div>
+    </div>  
+    
+    <div class="modal bs-example-modal-sm fade" tabindex="-1" role="dialog" id="legendaModal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Legenda</h4>
+                </div>
+                <div class="modal-body">
+                    <ol>
+                        <li>
+                            <i class="fa fa-square-o"/> Niet beantwoord</li>
+                        <li>
+                            <i class="fa fa-square" style="color:#99ccff"/> Moet nagekeken worden</li>
+                        <li>
+                            <i class="fa fa-square" style="color:#ff8080"/> Incorrect beantwoord</li>
+                        <li>
+                            <i class="fa fa-square" style="color:#fef79a"/> Gedeeltelijk correct beantwoord</li>
+                        <li>
+                            <i class="fa fa-square" style="color:#9ffa9e"/> Correct beantwoord</li>
+                    </ol>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="row">
+        <div class="span12">
+            <h1>
+                Details van assessment 
+                <t:unless test="status.equals('Bezig')">
+                    <t:if test="user.hasPermissionTo(assessmentDeletePermission)">
+                        <t:pagelink style="align:right" page="userpages/assessmentDelete" t:context="assessment">
+                            <i class="fa fa-trash-o"></i>
+                        </t:pagelink> 
+                    </t:if>
+                </t:unless>
+            </h1>
+        </div>
+    </div>
+    
+    <t:alerts/>
+    
+    <dl>
+        <dt>Assessment Link:</dt>
+        <t:if test="assessment.questions">
+            <dd>
+                <t:pagelink page="candidatepages/evaluation" context="[assessment.uid, firstQuestionId]">${assessmentLink}</t:pagelink>
+            </dd>
+        </t:if>
+        <t:unless test="assessment.questions">
+            <dd>
+                dit assessment bevat nog geen vragen!
+            </dd>
+        </t:unless>
+            
+        <dt>Sollicitant Naam:</dt>
+        <dd>
+            ${assessment.personName}&nbsp;
+            <a t:type="if" test="user.hasPermissionTo(assessmentEditPermission)">
+                <i class="fa fa-edit fa-lg" data-toggle="modal" data-target="#newSubjectModal"/>
+            </a>
+        </dd>
+            
+        <dt>Sollicitant Email:</dt>
+        <dd>
+            ${assessment.personEmail}&nbsp;
+            <a t:type="if" test="user.hasPermissionTo(assessmentEditPermission)">
+                <i class="fa fa-edit fa-lg" data-toggle="modal" data-target="#newSubjectModal"/>
+            </a>
+        </dd>
+            
+        <dt>Status:</dt>
+        <dd>${status}</dd>
+            
+        <dt>Score:</dt>
+        <dd>${assessment.achievedPoints} van de ${assessment.maxScore}</dd>
+        
+        <t:if test="assessment.duration">
+            <dt>Duur:</dt>
+            <dd>${durationTimestamp}</dd>
+        </t:if>
+    </dl>
+    
+    <t:unless test="status.equals('Gesloten')">
+        <t:unless test="status.equals('Bezig')">
+            <div class="btn-group" t:type="if" test="user.hasPermissionTo(assessmentEditPermission)">
+                <t:pageLink page="userpages/AssessmentAddQuestions" t:context="assessment" class="btn btn-primary">Vragen toevoegen</t:pageLink>
+                <t:pageLink page="userpages/AssessmentAddQuestionsBulk" t:context="assessment" class="btn btn-primary">Toevoegen in bulk</t:pageLink>
+            </div>
+            <br/>
+        </t:unless>
+        
+    </t:unless>
+    <t:unless test="status.equals('Nog niet gemaakt')">
+        <t:if test="assessment.uncheckedQuestions">
+            <t:if test="user.hasPermissionTo(checkAssessmentAnswersPermission)">
+                <t:pagelink page="userpages/AssessmentCheckAnswers" t:context="[assessment, null]" class="btn btn-info">Kijk open vragen na</t:pagelink> 
+            </t:if>
+            <br/>
+        </t:if>
+    </t:unless>
+    
+    <t:unless test="assessment.questions">
+        &nbsp;
+        <div class="alert alert-info" t:type="if" test="user.hasPermissionTo(assessmentEditPermission)">
+            <i class="fa fa-info-circle fa-lg"/> Er zijn nog geen vragen toegevoegd aan dit assessment. 
+            Druk op een van de twee knoppen hierboven om vragen toe te voegen.
+        </div>
+        <div class="alert alert-info" t:type="unless" test="user.hasPermissionTo(assessmentEditPermission)">
+            <i class="fa fa-info-circle fa-lg"/> Er zijn nog geen vragen toegevoegd aan dit assessment.
+        </div>
+    </t:unless>
+        
+    <t:if test="assessment.questions">
+        <h3 style="margin-bottom: 0px;">
+            Overzicht van vragen in dit assessment
+            <button class="fa fa-book fa-lg btn btn-default" data-toggle="modal" data-target="#legendaModal" style="font-size:70%;float:right"> Legenda</button>
+        </h3>
+        <table id="questionTable" class="table table-condensed table-hover">
+            <thead>
+                <tr colspan="6" class="info">
+                    <th>Vraagnummer:</th>
+                    <th>Titel:</th>
+                    <th>Categorie:</th>
+                    <th>Niveau:</th>
+                    <th>Type:</th>
+                    <th t:type="unless" test="status.equals('Nog niet gemaakt')">Punten gescoord:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <t:loop source="assessment.questions" value="question">
+                    <tr class="parent">
+                        <td style="background-color:${questionStatusColor}">${numberWithQuestion}</td>
+                        <td>
+                            <a class="expandLink">${question.title}</a>
+                        </td>
+                        <td>${question.categoryName}</td>
+                        <td>${question.difficulty}</td>
+                        <td>${typeOfQuestion}</td>
+                        <td  t:type="unless" test="status.equals('Nog niet gemaakt')">${pointsScored}</td>
+                    </tr>
+                    <tr class="child" style="display:none; background-color:#F9F9F9">
+                        <td colspan="7">
+                            <t:if test="getAssessmentAnswer(question).answered">
+                                <t:unless test="isClosed()">
+                                    <t:if test="user.hasPermissionTo(checkAssessmentAnswersPermission)">
+                                        <t:pagelink page="userpages/AssessmentCheckAnswers" style="float:right" 
+                                                    class="btn btn-info" t:context="[assessment, question]">Beoordeel</t:pagelink>
+                                    </t:if>
+                                </t:unless>
+                            </t:if>
+                            
+                            <t:if test="closed">
+                                Opties van deze vraag
+                                <table class="table table-condensed" style="width:50%">
+                                    <tr>
+                                        <th>Beschrijving:</th>
+                                        <th>Puntwaarde:</th>
+                                        <th>Correct</th>
+                                        <th>Testpersoon Geselecteerd:</th>
+                                    </tr>
+                                    <t:loop source="optionsFromQuestion" value="option">
+                                        <tr>
+                                            <td>${option.description}</td>
+                                            <td>${option.pointsWorth}</td>
+                                            <td t:type="if" test="option.correct">
+                                                <span style="color:green" class="glyphicon glyphicon-ok"></span>
+                                            </td>
+                                            <td t:type="unless" test="option.correct"></td>
+                                            <td t:type="unless" test="selected"></td>
+                                            <td t:type="if" test="selected">
+                                                <i class="fa fa-square"></i>
+                                            </td>
+                                        </tr>
+                                    </t:loop>
+                                </table>
+                            </t:if>
+
+                            <t:unless test="closed">
+                                <dl>
+                                    <dt>Examinator antwoord:</dt>
+                                    <bb>${examinerAnswerAlt}</bb>
+                            
+                                    <dt>Toegewezen punten:</dt>
+                                    <t:if test="assignedPointsAlt">
+                                        <bb>${assignedPointsAlt} / ${question.getMaxScore()}</bb>
+                                        <p:else>
+                                            <bb>geen / ${question.getMaxScore()}</bb>
+                                        </p:else>
+                                    </t:if>
+                            
+                                    <dt>Antwoord van testpersoon:</dt>
+                                    <bb>${userAnswer}</bb>
+                                </dl>
+                            </t:unless>
+                            <hr/>
+                            <p>
+                                <b>Beschrijving:</b>
+                            </p>
+                            <t:outputraw value="question.description"/>
+                        </td>
+                    </tr>
+                </t:loop>
+            </tbody>
+            <tfoot t:type="unless" test="status.equals('Nog niet gemaakt')">
+                <tr>
+                    <td colspan="5"/>
+                    <td style="border-bottom:thin solid #DDDDDD;">
+                        Totaal: ${assessment.achievedPoints} van de ${assessment.maxScore}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </t:if>
+</html>

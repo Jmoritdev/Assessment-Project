@@ -1,0 +1,85 @@
+<html t:type="layout" title="Voeg vragen toe in bulk"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+      
+    <p class="well">Hier kan je vragen in bulk toevoegen aan een assessment. 
+        Het is simpel. Voer per categorie, moeilijkheidsgraad en open of 
+        gesloten textvakje in hoeveel vragen je ervan wilt. 
+        Naast het textvakje staat hoeveel vragen er beschikbaar zijn.
+        Druk op opslaan als je klaar bent.</p>
+    
+    <t:form t:id="bulkAddForm">
+        <table class="table table-condensed table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th/>
+                    <th colspan="2" style="text-align:center">Junior</th>
+                    <th colspan="2" style="text-align:center">Medior</th>
+                    <th colspan="2" style="text-align:center">Senior</th>
+                </tr>
+                <tr>
+                    <th/>
+                    <th>Open</th>
+                    <th>Gesloten</th>
+                    <th>Open</th>
+                    <th>Gesloten</th>
+                    <th>Open</th>
+                    <th>Gesloten</th>
+                </tr>
+            </thead>
+            <tbody>
+                <t:loop source="categories" value="loopedCategory">
+                    <tr>
+                        <td style="width:10vw">
+                            <b>${loopedCategory.title}</b>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <t:textfield class="form-control" value="numberJuniorOpenQuestions" />
+                                <span style="cursor:pointer" class="input-group-addon" 
+                                      onclick="$(this).parents('.input-group').find('.form-control').val(${totalQuestionsJuniorOpen});">(${totalQuestionsJuniorOpen})</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <t:textfield class="form-control" value="numberJuniorClosedQuestions" />
+                                <span style="cursor:pointer" class="input-group-addon" 
+                                      onclick="$(this).parents('.input-group').find('.form-control').val(${totalQuestionsJuniorClosed});">(${totalQuestionsJuniorClosed})</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <t:textfield class="form-control" value="numberMediorOpenQuestions" />
+                                <span style="cursor:pointer" class="input-group-addon" 
+                                      onclick="$(this).parents('.input-group').find('.form-control').val(${totalQuestionsMediorOpen});">(${totalQuestionsMediorOpen})</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <t:textfield class="form-control" value="numberMediorClosedQuestions" />
+                                <span style="cursor:pointer" class="input-group-addon" 
+                                      onclick="$(this).parents('.input-group').find('.form-control').val(${totalQuestionsMediorClosed});">(${totalQuestionsMediorClosed})</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <t:textfield class="form-control" value="numberSeniorOpenQuestions" />
+                                <span style="cursor:pointer" class="input-group-addon" 
+                                      onclick="$(this).parents('.input-group').find('.form-control').val(${totalQuestionsSeniorOpen});">(${totalQuestionsSeniorOpen})</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <t:textfield class="form-control" value="numberSeniorClosedQuestions" />
+                                <span style="cursor:pointer" class="input-group-addon" 
+                                      onclick="$(this).parents('.input-group').find('.form-control').val(${totalQuestionsSeniorClosed});">(${totalQuestionsSeniorClosed})</span>
+                            </div>
+                        </td>    
+                    </tr>
+                </t:loop>
+            </tbody>
+        </table>
+        <t:submit class="btn btn-warning" value="Opslaan"/>&nbsp;
+        <t:pagelink page="userpages/assessmentDetails" t:context="assessment" class="btn btn-primary">Annuleren</t:pagelink>
+    </t:form>
+</html>

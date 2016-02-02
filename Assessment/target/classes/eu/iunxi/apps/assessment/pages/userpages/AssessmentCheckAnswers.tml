@@ -1,0 +1,39 @@
+<html t:type="layout" title="Check antwoorden"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+      
+    <t:unless test="assessmentAnswer">
+        <div class="alert alert-info"><i class="fa fa-info-circle fa-lg"/> Alle vragen zijn nagekeken.</div>
+        <t:pagelink page="userpages/AssessmentDetails" t:context="assessment" class="btn btn-primary">Terug</t:pagelink>
+    </t:unless>
+    
+    <t:if test="assessmentAnswer">
+        <div class="jumbotron">
+            <h4>Vraag beschrijving:</h4> 
+            <br/>
+            <t:outputraw value="assessmentAnswer.question.description"/>
+            <hr/>
+        
+            <h4>Antwoord sollicitant:</h4>
+            <br/>
+            ${userAnswer}
+        </div>
+        
+        
+        
+        <p>Voorbeeld antwoord: ${answerCheatSheet}</p> 
+        
+        <t:form t:id="checkForm">
+            <div class="form-group">
+                <t:label for="examinerResponseField"/>
+                <t:textfield class="form-control" value="examinerAnswer" t:id="examinerResponseField" label="Reactie op antwoord"/>
+            </div>
+            <div class="form-group">
+                <t:label for="assignedPointsField"/>
+                <t:textfield t:validate="required" class="form-control" value="assignedPoints" t:id="assignedPointsField" label="Toegewezen punten (max ${assessmentAnswer.question.maxScore})"/>
+            </div>
+            <t:submit class="btn btn-warning" value="Opslaan"/>
+        </t:form>
+    </t:if>  
+
+</html>

@@ -1,0 +1,34 @@
+<html t:type="layout" title="Overzicht van gebruikers"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+    
+    
+    <t:pagelink class="btn btn-primary" page="userpages/userNew">Nieuwe gebruiker</t:pagelink>
+    <table class="table table-condensed table-hover">
+        <thead>
+            <tr class="info">
+                <th>Naam:</th>
+                <th>Email:</th>
+                <th></th>
+            </tr> 
+        </thead>
+        <tbody>
+            <t:loop t:source="users" t:value="loopedUser">
+                <tr>
+                    <td>${loopedUser.name}</td>
+                    <td>${loopedUser.email}</td>
+                    <td>
+                        <t:if test="user.hasPermissionTo(userEditPermission)">
+                            <t:pagelink page="userpages/userNew" context="loopedUser"><i class="fa fa-edit fa-lg"/></t:pagelink>
+                            &nbsp;
+                        </t:if>
+                        <t:if test="user.hasPermissionTo(userRemovePermission)">
+                            <t:pagelink page="userpages/userDelete" context="loopedUser"><i class="fa fa-trash fa-lg"/></t:pagelink>
+                        </t:if>
+                    </td>
+                </tr>
+            </t:loop>
+        </tbody>
+    </table>
+    
+</html>    

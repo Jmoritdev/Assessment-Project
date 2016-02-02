@@ -1,0 +1,13 @@
+<html t:type="layout" title="${category.title} categorie bewerken"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+    
+    <t:form t:id="categoryEditForm">
+        <div class="form-group">
+            <t:label for="categoryEditField"/>
+            <t:textfield value="category.title" class="form-control" t:id="categoryEditField" label="Titel" validate="required"/>
+        </div>
+        <t:submit value="Opslaan" class="btn btn-warning"/>
+    </t:form>
+    
+</html>

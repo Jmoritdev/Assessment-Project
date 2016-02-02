@@ -1,0 +1,18 @@
+<html t:type="layout" title=""
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <h3 class="panel-title">Vraag verwijderen</h3>
+        </div>
+        <div class="panel-body">
+            <strong>Weet je zeker dat je de vraag met de titel ${question.title} wilt verwijderen?</strong>
+        </div>
+        <div class="panel-footer">
+            <t:eventlink t:event="delete" class="btn btn-danger">Verwijderen</t:eventlink>&nbsp;
+            <t:pagelink page="userpages/categoryDetails" class="btn btn-primary" t:context="question.category">Annuleren</t:pagelink>
+        </div>
+    </div>
+
+</html>

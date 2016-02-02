@@ -1,0 +1,31 @@
+<html t:type="layout" title="" hideNav="true"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+    
+    <t:form t:id="newImageForm">
+        <h4><label>Upload een plaatje</label></h4>
+        <t:upload id="file" t:value="file" validate="required"/>
+        <t:submit value="Upload" id="uploadButton"/>
+    </t:form>  
+    
+    <hr/>
+    
+    <h4>
+        <label>Selecteer een plaatje</label>
+    </h4>
+    <div class="row">
+        <t:loop source="images" value="loopedImage">
+            <a><div class="thumbnail" style="float:left; margin:1%; width:23%;" onclick="returnFileUrl('${createLink(loopedImage)}')">
+                <div style="height:25vh; width:100%;">
+                    <img src="${createLink(loopedImage)}" alt="plaatje" style=" max-width:100%; max-height:100%; vertical-align: center" />
+                </div>
+                <div class="caption">
+                    ${loopedImage.fileName}
+                </div>
+            </div></a>
+        </t:loop>
+    </div>
+    
+
+    
+</html>
